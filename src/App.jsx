@@ -165,6 +165,7 @@ const App = () => {
           </div>
 
           <audio
+            controls
             ref={audioPlayer}
             autoPlay
             onTimeUpdate={handleTimeUpdate}
@@ -172,7 +173,7 @@ const App = () => {
           >
             <source src={curr.url}></source>
           </audio>
-          <div className="progress-container" onClick={handleProgressBarClick}>
+          {/* <div className="progress-container" onClick={handleProgressBarClick}>
             <div
               className="progress"
               style={{ width: `${progress}%`, zIndex: "1" }}
@@ -182,7 +183,7 @@ const App = () => {
             <button className="audio-btn" onClick={handleTogglePlay}>
               {isPlaying ? "Pause" : "Play"}
             </button>
-          </div>
+          </div> */}
         </div>
       ) : null}
     </>
