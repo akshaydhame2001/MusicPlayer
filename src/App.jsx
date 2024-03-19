@@ -10,6 +10,8 @@ const App = () => {
   const audioPlayer = useRef();
   const [gridView, setGridView] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
 
   useEffect(() => {
     axios
@@ -54,6 +56,14 @@ const App = () => {
     audioPlayer.current.currentTime = newTime;
     setProgress(clickPercent);
   };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = songs.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const hasScrollbar = document.body.scrollHeight > document.body.clientHeight;
 
   return (
     <>
@@ -120,7 +130,7 @@ const App = () => {
       <div>
         {gridView ? (
           <div className="grid">
-            {songs.map((element, index) => (
+            {currentItems.map((element, index) => (
               <div
                 key={index}
                 className="inside-grid"
@@ -136,7 +146,7 @@ const App = () => {
           </div>
         ) : (
           <div className="list">
-            {songs.map((element, index) => (
+            {currentItems.map((element, index) => (
               <div
                 key={index}
                 className="inside-list"
@@ -186,6 +196,24 @@ const App = () => {
           </div> */}
         </div>
       ) : null}
+
+      <ul className="pagination">
+        {songs.length > 0 &&
+          Array.from({ length: Math.ceil(songs.length / itemsPerPage) }).map(
+            (_, index) => (
+              <li key={index} className="page-item">
+                <button
+                  onClick={() => paginate(index + 1)}
+                  className={`page-link ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            )
+          )}
+      </ul>
     </>
   );
 };
